@@ -37,3 +37,25 @@ webpack hello.js hello.bundle.js --module-bind 'css=style-loader!css-loader'
 
 - 打包原因 `--display-reasons`
 ```webpack hello.js hello.bundle.js --progress --display-modules --display-reasons```
+
+### webpack基本配置
+
+新建配置文件webpack.config.js
+```js
+
+module.exports = {
+    entry: './src/js/main.js',
+    output: {
+        path: './dist/js',
+        filename: 'bundle.js'
+    }
+}
+
+```
+在控制台中输入webpack默认会执行这个脚本，也可以指定`--config`来选择脚本
+
+entry入口可以单个也可以多个，多个时需要打包在不同的js中。
+
+[name]:是文件名;
+[hash]是本次打包的哈希;
+[chunkhash]是每个文件的哈希，文件内容改变时才会改变
