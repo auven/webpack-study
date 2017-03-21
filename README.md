@@ -59,3 +59,51 @@ entry入口可以单个也可以多个，多个时需要打包在不同的js中�
 [name]:是文件名;
 [hash]是本次打包的哈希;
 [chunkhash]是每个文件的哈希，文件内容改变时才会改变
+
+### 生成项目中的html页面
+
+首先安装`html-webpack-plugin`插件: `cnpm install html-webpack-plugin --save-dev`
+
+#### 如何使用
+```js
+
+//首先引入
+var htmlWebpackPlugin = require('html-webpack-plugin');
+
+plugins: [
+        new htmlWebpackPlugin({
+            template: 'index.html', //以这个为模板生成页面
+            // filename: 'index-[hash].html', //为生成的html文件指定名称
+            filename: 'index.html',
+            inject: false, //规定js插入是在头部还是body把标签里，默认是body尾部，改为false时不插入
+            title: 'webpack is good', //设置属性，用于在模板(template)里调用
+            date: new Date(),
+            minify: {
+                removeComments: true, // 删除注释
+                collapseWhitespace: true // 删除空白
+            }
+        })
+    ]
+
+
+```
+
+支持ejs模板语法，直接在html中使用
+```html
+
+<head>
+    <meta charset="UTF-8">
+    <!--在这里调用了在webpack.config.js里设置的title-->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+
+</head>
+
+<body>
+    <% for (var key in htmlWebpackPlugin) { %>
+        <%= key %>
+    <% } %>
+</body>
+
+```
