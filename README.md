@@ -107,3 +107,36 @@ plugins: [
 </body>
 
 ```
+
+#### 生成多页面
+
+多次使用`new htmlWebpackPlugin()`并配置相关参数。
+
+```js
+
+        new htmlWebpackPlugin({
+            template: 'index.html',
+            filename: 'b.html',
+            inject: 'body',
+            title: 'this is b',
+            // chunks: ['b'], //为该页面指定要包含的js
+            excludeChunks: ['a', 'c'] //为该页面指定要排除的js
+        }),
+        new htmlWebpackPlugin({
+            template: 'index.html',
+            filename: 'c.html',
+            inject: 'body',
+            title: 'this is c',
+            // chunks: ['c'],
+            excludeChunks: ['a', 'b']
+        })
+
+```
+
+#### 将js直接插入页面
+
+```html
+
+<%= compilation.assets[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
+
+```
