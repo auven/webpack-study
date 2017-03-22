@@ -315,3 +315,81 @@ include: path.resolve(__dirname, 'src/'), // 指定打包的范围，必须是�
 }
 
 ```
+
+#### 处理模板文件
+
+安装html-loader
+`cnpm install html-loader ejs-loader --save-dev`
+
+配置
+```js
+
+{
+    test: /\.html$/,
+    loader: "html-loader"
+},
+{
+    // test: /\.ejs$/,
+    test: /\.tpl$/,
+    loader: "ejs-loader"
+}
+
+```
+
+#### 处理图片以及其他文件
+
+安装file-loader
+`cnpm install file-loader url-loader image-webpack-loader --save-dev`
+
+在模板中如何引用图片
+```html
+
+<div class="layer">
+    <img src="${ require('../../assets/0.jpg') }" />
+    <div> this is a <%= name %> layer </div>
+    <% for (var i = 0; i < arr.length; i++) {  %>
+        <%= arr[i] %>
+    <% } %>
+</div>
+
+```
+
+使用file-loader
+```js
+
+{
+    test: /\.(png|jpg|git|svg)$/i,
+    loader: "file-loader",
+    query: {
+        name: 'assets/[name]-[hash:5].[ext]'
+    }
+}
+
+```
+
+使用url-loader
+```js
+
+{
+    test: /\.(png|jpg|git|svg)$/i,
+    loader: "url-loader",
+    query: {
+        name: 'assets/[name]-[hash:5].[ext]',
+        limit: 40000 // 40k ，当图片小于40k时，被打包成base64
+    }
+}
+
+```
+
+使用image-webpack-loader压缩图片
+```js
+
+{
+    test: /\.(png|jpg|git|svg)$/i,
+    loaders: [
+        "url-loader?limit=10000&name=assets/[name]-[hash:5].[ext]",
+        "image-webpack-loader"  // 压缩图片
+    ]
+}
+
+```

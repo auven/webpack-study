@@ -81,6 +81,22 @@ module.exports = {
                         }
                     }
                 }, 'sass-loader']
+            },
+            {
+                test: /\.html$/,
+                loader: "html-loader"
+            },
+            {
+                // test: /\.ejs$/,
+                test: /\.tpl$/,
+                loader: "ejs-loader"
+            },
+            {
+                test: /\.(png|jpg|git|svg)$/i,
+                loaders: [
+                    "url-loader?limit=10000&name=assets/[name]-[hash:5].[ext]",
+                    "image-webpack-loader"  // 压缩图片
+                ]
             }
         ]
     },
