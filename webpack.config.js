@@ -3,6 +3,7 @@ var path = require("path"); // ，引入node.js的API，获取当前目录的绝
 
 module.exports = {
     //context: , //运行环境的上下文，即运行目录
+    context: __dirname, // 指定为当前目录
 
     // entry: './src/js/main.js',
     // entry: ['./src/js/main.js', './src/js/a.js'],
@@ -33,9 +34,61 @@ module.exports = {
                 query: {
                     presets: ['latest'] // 告诉babel如何去处理我们的ES6，以哪个版本的ES6规则来处理，这里的lastest是所有的版本
                 }
+            },
+            // {
+            //     test: /\.css$/,
+            //     loader: 'style-loader!css-loader!postcss-loader' // 使用感叹号串联loader
+            //     // loaders: ["style-loader", "css-loader", "postcss-loader"] // loader的另一种写法
+            // },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: function () {
+                            return [
+                                require('postcss-import'), // 处理css中的@import
+                                require('autoprefixer')  // 自动添加浏览器前缀
+                            ];
+                        }
+                    }
+                }]
+            },
+            {
+                test: /\.less$/,
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: function () {
+                            return [
+                                require('postcss-import'), // 处理css中的@import
+                                require('autoprefixer')  // 自动添加浏览器前缀
+                            ];
+                        }
+                    }
+                }, 'less-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: function () {
+                            return [
+                                require('postcss-import'), // 处理css中的@import
+                                require('autoprefixer')  // 自动添加浏览器前缀
+                            ];
+                        }
+                    }
+                }, 'sass-loader']
             }
         ]
     },
+    // postcss: [
+    //     require('autoprefixer')({
+    //         browsers: ['last 5 versions']
+    //     })
+    // ],
     // plugins: [
     //     new htmlWebpackPlugin({
     //         template: 'index.html', //以这个为模板生成页面

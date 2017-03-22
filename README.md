@@ -234,3 +234,84 @@ exclude: './node_modules/', // 不处理在这个文件夹里的ES6文件，即�
 include: path.resolve(__dirname, 'src/'), // 指定打包的范围，必须是绝对路径
 
 ```
+
+#### 使用css-loader处理css
+
+安装css-loader和style-loader
+`cnpm install css-loader style-loader --save-dev`
+
+自动添加前缀
+`cnpm install postcss-loader autoprefixer --save-dev`
+
+处理css中的@import
+`cnpm install postcss-import --save-dev`
+
+配置
+```js
+
+{
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader?importLoaders=1', {
+        loader: 'postcss-loader',
+        options: {
+            plugins: function () {
+                return [
+                    require('postcss-import'), // 处理css中的@import
+                    require('autoprefixer')  // 自动添加浏览器前缀
+                ];
+            }
+        }
+    }]
+}
+
+```
+
+#### 使用less-loader处理less
+
+安装less和less-loader
+`cnpm install less less-loader --save-dev`
+
+配置
+```js
+
+{
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader?importLoaders=1', {
+        loader: 'postcss-loader',
+        options: {
+            plugins: function () {
+                return [
+                    require('postcss-import'), // 处理css中的@import
+                    require('autoprefixer')  // 自动添加浏览器前缀
+                ];
+            }
+        }
+    }, 'less-loader']
+}
+
+```
+
+#### 使用sass-loader处理scss
+
+安装node-sass和sass-loader
+`cnpm install node-sass sass-loader --save-dev`
+
+配置
+```js
+
+{
+    test: /\.sass$/,
+    use: ['style-loader', 'css-loader?importLoaders=1', {
+        loader: 'postcss-loader',
+        options: {
+            plugins: function () {
+                return [
+                    require('postcss-import'), // 处理css中的@import
+                    require('autoprefixer')  // 自动添加浏览器前缀
+                ];
+            }
+        }
+    }, 'sass-loader']
+}
+
+```
