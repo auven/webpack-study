@@ -140,3 +140,97 @@ plugins: [
 <%= compilation.assets[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
 
 ```
+
+### 处理项目中的资源文件
+
+#### 什么是loader
+
+处理资源文件的工具，
+特性：1.可以是串联的，2.可以是同步或是异步的，3.可以接受参数，4.可以通过正则表达式来指定要处理的文件类型，等等
+
+传递参数：
+可以用require的方式：`require("url-loader?minetype=image/png!./file.png")`
+也可以在配置文件中添加`query`
+```js
+
+{
+    test: /\.png$/,
+    loader: "url-loader",
+    query: { mimetype: "image/png" }
+}
+
+```
+
+注意：最新版本的webpack，不让简写loader，所以必须加上“-loader”
+
+#### 使用babel-loader转换ES6
+
+安装babel-loader和babel-core
+`cnpm install babel-loader babel-core babel-preset-latest --save-dev`
+
+指定presets的方式（任选一）：
+1. 可以在webpack.config.js中配置
+```js
+
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                query: {
+                    presets: ['latest'] // 告诉babel如何去处理我们的ES6，以哪个版本的ES6规则来处理，这里的lastest是所有的版本
+                }
+            }
+        ]
+
+```
+
+2. 可以在项目的根目录下建立babel的配置文件（.babelrc）
+.babelrc
+```js
+
+{
+    "presets": ["latest"]
+}
+
+```
+
+3. 直接在package.json中配置
+```js
+
+{
+  "name": "webpack-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "babel": {
+    "presets": ["latest"]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack --config webpack.config.js --progress --display-modules --colors --display-reasons"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "css-loader": "^0.27.3",
+    "html-webpack-plugin": "^2.28.0",
+    "style-loader": "^0.15.0",
+    "webpack": "^2.2.1"
+  }
+}
+
+
+```
+
+在这里我们决定选第一种。
+
+提高打包速度：
+```js
+
+exclude: './node_modules/', // 不处理在这个文件夹里的ES6文件，即指定不打包的范围
+include: path.resolve(__dirname, 'src/'), // 指定打包的范围，必须是绝对路径
+
+```
